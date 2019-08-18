@@ -2,6 +2,13 @@ const gulp = require("gulp");
 const browserSync = require("browser-sync").create();
 const sass = require("gulp-sass");
 const del = require("del");
+const fs = require("fs");
+
+function mkdir(done) {
+  fs.mkdir("src/css", () => {});
+  fs.mkdir("src/js", () => {});
+  done();
+}
 
 function clean() {
   return del(["src/css/*", "src/js/*"]);
@@ -44,7 +51,7 @@ function watch_files() {
 }
 
 const watch = gulp.parallel(watch_files, launch_server);
-const build = gulp.series(clean, gulp.parallel(move_js, watch));
+const build = gulp.series(clean, mkdir, gulp.parallel(move_js, watch));
 
 exports.clean = clean;
 exports.watch = watch;
